@@ -67,45 +67,6 @@ def receive_series(data: SeriesMetadata):
     print(f"Received series {data.SeriesInstanceUID} with {data.NumInstances} instances")
     return {"status": "ok"}
 
-# List all series in the database - Diagnostics
-@app.get("/series")
-def list_series():
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    try:
-        cur.execute("SELECT SeriesInstanceUID, PatientID, PatientName, StudyInstanceUID, NumInstances FROM series ORDER BY rowid DESC")
-        rows = cur.fetchall()
-    finally:
-        conn.close()
-    return [
-        {
-            "SeriesInstanceUID": r[0],
-            "PatientID": r[1],
-            "PatientName": r[2],
-            "StudyInstanceUID": r[3],
-            "NumInstances": r[4],
-        }
-        for r in rows
-    ]
 
-# Additional endpoints for fetching metadata - Diagnostics
-@app.get("/series/{series_uid}")
-def get_series(series_uid: str):
-    conn = sqlite3.connect(DB_PATH)
-    cur = conn.cursor()
-    try:
-        cur.execute("SELECT SeriesInstanceUID, PatientID, PatientName, StudyInstanceUID, NumInstances FROM series WHERE SeriesInstanceUID=?", (series_uid,))
-        row = cur.fetchone()
-    finally:
-        conn.close()
-    if not row:
-        raise HTTPException(status_code=404, detail="Series not found")
-    return {
-        "SeriesInstanceUID": row[0],
-        "PatientID": row[1],
-        "PatientName": row[2],
-        "StudyInstanceUID": row[3],
-        "NumInstances": row[4],
-    }
 
 

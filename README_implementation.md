@@ -83,9 +83,15 @@ CREATE TABLE IF NOT EXISTS series (
 
 ## Future Improvements
 
+- Support multiple concurrent series in buffer: For simplification, current assumption is only one series arrives at a time. Routing each incoming dataset to the correct SeriesCollector by SeriesInstanceUID would be implemented for extension, all collectors would have to be scanned periodically to check for dispatch.
+- Improve debounce logic: For simplification, current state is a hardcoded timeout threshold. Further extension could be an adaptive timeout (e.g. Exponential Moving Average of inter-arrival times) or a "grace period" that restarts after first idle hit.
+- Improve the buffer: Current buffer is a simple deque which can grow unbounded.
+    - asyncio.Queue can be utilized
+- SQLite -> PostgreSQL for scalability and concurrency.
 - Add authentication/authorization for API endpoints
-- Support multiple concurrent series in buffer
-- Improve error handling and logging
+- Improve error handling and logging with structured logs, metrics, tracing.
+- Cloud-native evolution
+- Additional tests
 
 
 
