@@ -35,7 +35,7 @@ class ModalityStoreSCP():
 
         # TODO: Do something with the dataset. Think about how you can transfer the dataset from this place
         self.incoming.append(dataset)
-        dataset.save_as(dataset.SOPInstanceUID, write_like_original=False)
+        #dataset.save_as(dataset.SOPInstanceUID, write_like_original=False)
 
 
         return 0x0000
